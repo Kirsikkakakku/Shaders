@@ -62,5 +62,17 @@ Shader "Custom/KeywordEsimerkki"
             
             ENDHLSL
         }
+
+        pass
+        {
+            Name "Depth Only"
+            Tags {"LightMode" = "DepthOnly"}
+            
+            Cull Back
+            ZTest LEqual
+            ZWrite On
+            ColorMask R
+            
+        }
     }
 }
