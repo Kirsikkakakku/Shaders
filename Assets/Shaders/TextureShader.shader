@@ -25,33 +25,41 @@ Shader "Custom/TextureShader"
             struct Attributes
             {
                 float3 positionOS : POSITION;
+                float3 normalOS : NORMAL;
                 float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
+                float3 normalWS : TEXCOORD0;
+                float3 positionWS : TEXCOORD1;
+                float2 uv : TEXCOORD2;
             };
+
+            CBUFFER_START(UnityPerMaterial)
+            float4 _MainTex_ST;
+            CBUFFER_END
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
-            float4 _MainTex_ST;
 
             Varyings vert (const Attributes input)
             {
                 Varyings output;
 
-                output.positionHCS = TransformObjectToHClip(input.positionOS);
-                output.uv = input.uv;
+                output.positionHCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
+                output.uv = input.uv * _MainTex_ST.xy + _MainTex_ST.zw;
 
                 return output;
             }
 
             float4 frag (const Varyings input) : SV_Target
             {
-                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv);
+                float4 col = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, input.uv + _Time.y * float2(0.5, 1));
                 return col;
             }
             
