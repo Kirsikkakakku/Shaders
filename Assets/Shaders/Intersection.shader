@@ -2,8 +2,8 @@ Shader "Custom/Intersection"
 {
     Properties
     {
-        [MainColor] _Color("Base Color", Color) = (1, 1, 1, 1)
-        [MainColor] _SecondaryColor("Intersection Color", Color) = (0, 0, 0, 0)
+        _Color("Base Color", Color) = (1, 1, 1, 1)
+        _SecondaryColor("Intersection Color", Color) = (0, 0, 0, 0)
     }
     SubShader
     {
